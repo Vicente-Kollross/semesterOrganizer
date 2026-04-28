@@ -3,14 +3,20 @@ import os
 
 db = "database.pkl"
 
-login_g = "admin"
-senha_g = "123"
+gerente = {
+  "login": "admin",
+  "senha": "123"
+}
+cliente = {
+  "nome": "",
+  "saldo": 0
+}
 
 tentativa = 0
 
 if not os.path.exists(db):
-    with open(db, 'wb') as f:
-        pickle.dump({}, f)
+    with open(db, 'rb') as f:
+        dados = pickle.load(f)
 else:
     try:
         with open(db, 'rb') as f:
@@ -18,7 +24,7 @@ else:
         if not isinstance(dados, dict):
             raise ValueError("Banco de dados não é um dicionário!")
     except Exception:
-        with open(db, 'wb') as f:
+        with open(db, 'rb') as f:
             pickle.dump({}, f)
 
 print ("Bem-vindo ao sistema bancario")
@@ -53,7 +59,7 @@ while True:
   elif escolha == "2":
     login_gerente = input("Informe o login:\t")
     senha_gerente = input("Informe a senha:\t")
-    while login_gerente != login_g or senha_gerente != senha_g:
+    while login_gerente != gerente["login"] or senha_gerente != gerente["senha"]:
       print("Senha incorreta")
       login_gerente = input("Informe o login:\t")
       senha_gerente = input("Informe a senha:\t")
@@ -62,20 +68,49 @@ while True:
         print("Senha inválida...\tTente Novamente")
         break
 
-  if login_gerente == login_g and senha_gerente == senha_g:
+  if login_gerente == gerente["login"] and senha_gerente == gerente["senha"]:
     print("Login bem-sucedido!")
     
     gerente_opcoes = input("Selecione uma opcao:\n1 - Cadastrar ou alterar o nome de um cliente\n2 - Corrigir Saldo\n3 - Consultar Dados de um Cliente\n4 - Listar ultimas transacoes (extrato)\n0 - Sair\n")
     
     if gerente_opcoes == "1":
         nome_cliente = input("Informe o nome do cliente:\t")
-        print("Cadastrar ou alterar o nome de um cliente")
+        saldo_cliente = input("Informe o saldo do cliente:\t")
+
+        if nome_cliente and saldo_cliente:
+            dados[cliente["nome"]["saldo"]] = {
+              "nome": nome_cliente,
+              "saldo": float(saldo_cliente),
+              "extrato": []
+            }
+
+            with open(db, "wb") as f:
+              pickle.dump(dados, f)
+            print("Cliente cadastrado com sucesso!")
+        else:
+            print("Erro ao cadastrar cliente!")
     elif gerente_opcoes == "2":
-        print("Corrigir Saldo")
+      novo_saldo = input("Informe o novo saldo do cliente:\t")
+      if novo_saldo:
+        dados[cliente["nome"]["saldo"]] = {
+          "nome": cliente["nome"],
+          "saldo": float(novo_saldo),
+          "extrato": []
+        }
+        with open(db, "wb") as f:
+          pickle.dump(dados, f)
+
+        print("Saldo corrigido com sucesso!")
     elif gerente_opcoes == "3":
-        print("Consultar Dados de um Cliente")
+      with open(db, "rb") as f:
+        dados = pickle.load(f)
+
+      print("Saldo do cliente: ", dados[cliente["nome"]["saldo"]]["saldo"])
     elif gerente_opcoes == "4":
-        print("Listar ultimas transacoes (extrato)")
+      with open(db, "rb") as f:
+        dados = pickle.load(f)
+
+      print("Extrato do cliente: ", dados[cliente["nome"]["saldo"]]["extrato"])
     elif gerente_opcoes == "0":
         continue
     else:
