@@ -27,13 +27,16 @@ while True:
 
   escolha = input("Selecione uma opcao:\n1 - Cliente\n2 - Gerente\n3 - Salvar alteracoes em disco\n0 - Sair\n")
 
-  if escolha == "1": ## CLIENTE
-    cliente_opcoes = input("Selecione uma opcao:\n1 - Consultar saldo\n2 - Depositar valor\n3 - Sacar valor\n4 - Simular rendimento\n5 - Listar ultimas transacoes (extrato)\n6 - Sair\n")
+## ------------ MODO CLIENTE ------------ ##
 
-    if cliente_opcoes == "1":
-      print("Consultar saldo")
-    elif cliente_opcoes == "2":
-      print("Depositar valor")
+  if escolha == "1": 
+    cliente_opcoes = input("Selecione uma opcao:\n1 - Consultar saldo\n2 - Depositar valor\n3 - Sacar valor\n4 - Simular rendimento\n5 - Listar ultimas transacoes (extrato)\n6 - Sair\n")
+    
+    if cliente_opcoes == "1": 
+      valor_deposito = int(input("Informe o valor a ser depositado: "))
+
+      if valor_deposito != 0:
+        print(f"Valor depositado: {valor_deposito}")
     elif cliente_opcoes == "3":
       print("Sacar valor")
     elif cliente_opcoes == "4":
@@ -45,7 +48,9 @@ while True:
     else:
       print("Opcao invalida")
 
-  elif escolha == "2": ## GERENTE 
+## ------------ MODO GERENTE ------------ ##
+
+  elif escolha == "2":
     login_gerente = input("Informe o login:\t")
     senha_gerente = input("Informe a senha:\t")
     while login_gerente != login_g or senha_gerente != senha_g:
@@ -57,10 +62,28 @@ while True:
         print("Senha inválida...\tTente Novamente")
         break
 
+  if login_gerente == login_g and senha_gerente == senha_g:
+    print("Login bem-sucedido!")
+    
+    gerente_opcoes = input("Selecione uma opcao:\n1 - Cadastrar ou alterar o nome de um cliente\n2 - Corrigir Saldo\n3 - Consultar Dados de um Cliente\n4 - Listar ultimas transacoes (extrato)\n0 - Sair\n")
+    
+    if gerente_opcoes == "1":
+        nome_cliente = input("Informe o nome do cliente:\t")
+        print("Cadastrar ou alterar o nome de um cliente")
+    elif gerente_opcoes == "2":
+        print("Corrigir Saldo")
+    elif gerente_opcoes == "3":
+        print("Consultar Dados de um Cliente")
+    elif gerente_opcoes == "4":
+        print("Listar ultimas transacoes (extrato)")
+    elif gerente_opcoes == "0":
+        continue
+    else:
+        print("Opcao invalida")
 
-    gerente_opcoes = input("Selecione uma opcao:\n1 - Criar conta\n2 - Depositar valor\n3 - Sacar valor\n4 - Simular rendimento\n5 - Listar ultimas transacoes (extrato)\n6 - Sair\n")
- 
-  elif escolha == "3": ## SALVAR ALTERACOES EM DISCO
+## ------------ SALVAR OS DADOS, GARANTINDO A PERSISTÊNCIA DOS DADOS ------------ ##
+
+  elif escolha == "3": 
     salvar_alteracoes = input("Deseja salvar as alteracoes em disco? (s/n)")
     if salvar_alteracoes == "s":
       with open(db, 'wb') as f:
@@ -68,8 +91,7 @@ while True:
       print("Alteracoes salvas com sucesso")
     else:
       print("Alteracoes nao salvas")
- 
- 
+
   elif escolha == "0": ## SAIR
     break
   else:
