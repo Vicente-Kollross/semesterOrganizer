@@ -1,1 +1,0 @@
-cliente = {"nome": None, "saldo": 0, "extrato": []}
