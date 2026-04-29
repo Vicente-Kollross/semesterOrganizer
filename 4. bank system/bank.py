@@ -1,6 +1,6 @@
 import pickle
 import os
-cliente = {"nome": None, "saldo": 0, "extrato": []}
+
 db = 'database.pkl'
 print ("Bem-vindo ao sistema bancario")
 
@@ -16,3 +16,4 @@ while escolha != "0":
   elif escolha == "4":
     print("Extrato")
 
+#vicente
