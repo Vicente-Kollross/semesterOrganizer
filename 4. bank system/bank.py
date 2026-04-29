@@ -8,11 +8,7 @@ gerente = {
   "login": "admin",
   "senha": "123"
 }
-cliente = {
-  "nome": "",
-  "saldo": 0,
-  "extrato": []
-}
+
 
 tentativa = 0
 
@@ -42,6 +38,7 @@ while True:
     
     if cliente_opcoes == "1": 
       print("Consultar saldo")
+      
 
     elif cliente_opcoes == "2":
 
@@ -78,7 +75,7 @@ while True:
   elif escolha == "2":
     login_gerente = input("Informe o login:\t")
     senha_gerente = input("Informe a senha:\t")
-    while login_gerente != gerente.login or senha_gerente != gerente.senha:
+    while login_gerente != gerente["login"] or senha_gerente != gerente["senha"]:
       print("Senha incorreta")
       login_gerente = input("Informe o login:\t")
       senha_gerente = input("Informe a senha:\t")
@@ -87,20 +84,22 @@ while True:
         print("Senha inválida...\tTente Novamente")
         break
 
-  if login_gerente == gerente.login and senha_gerente == gerente.senha:
-    print("Login bem-sucedido!")
+    if login_gerente == gerente["login"] and senha_gerente == gerente["senha"]:
+      print("Login bem-sucedido!")
     
     gerente_opcoes = input("Selecione uma opcao:\n1 - Cadastrar ou alterar o nome de um cliente\n2 - Corrigir Saldo\n3 - Consultar Dados de um Cliente\n4 - Listar ultimas transacoes (extrato)\n0 - Sair\n")
     
     if gerente_opcoes == "1":
         nome_cliente = input("Informe o nome do cliente:\t")
-        saldo_cliente = input("Informe o saldo do cliente:\t")
+        saldo_cliente = float(input("Informe o saldo do cliente:\t"))
 
         if nome_cliente and saldo_cliente:
             dados["cliente"] = {
               "nome": nome_cliente,
-              "saldo": float(saldo_cliente),
-              "extrato": []
+              "saldo": saldo_cliente,
+              "extrato": [
+            datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " - Saldo: R$ " + str(saldo_cliente)
+          ]
             }
 
             with open(db, "wb") as f:
@@ -112,7 +111,6 @@ while True:
       novo_saldo = input("Informe o novo saldo do cliente:\t")
       if novo_saldo:
         dados["cliente"] = {
-          "nome": cliente["nome"],
           "saldo": float(novo_saldo),
           "extrato": []
         }
@@ -124,12 +122,10 @@ while True:
       with open(db, "rb") as f:
         dados = pickle.load(f)
 
-      print("Saldo do cliente: ", dados[cliente["nome"]["saldo"]]["saldo"])
     elif gerente_opcoes == "4":
       with open(db, "rb") as f:
         dados = pickle.load(f)
 
-      print("Extrato do cliente: ", dados[cliente["nome"]["saldo"]]["extrato"])
     elif gerente_opcoes == "0":
         continue
     else:
