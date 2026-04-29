@@ -42,28 +42,43 @@ while True:
     else:
       print(f"\nBem-vindo(a), {nome_cliente}!")
       cliente_atual = login_cliente
-      while True:
 
-        cliente_opcoes = input("Selecione uma opcao:\n1 - Consultar saldo\n2 - Depositar valor\n3 - Sacar valor\n4 - Simular rendimento\n5 - Listar ultimas transacoes (extrato)\n6 - Sair\n")
-      
-        if cliente_opcoes == "1": 
-          print("Consultar saldo")
-          
+      cliente_opcoes = input("Selecione uma opcao:\n1 - Consultar saldo\n2 - Depositar valor\n3 - Sacar valor\n4 - Simular rendimento\n5 - Listar ultimas transacoes (extrato)\n6 - Sair\n")
+    
+      if cliente_opcoes == "1": 
+        print(f"\nSaldo atual: R$ {dados[cliente_atual]['saldo']:.2f}")
+        
+      elif cliente_opcoes == "2":
+          valor_deposito = float(input("Informe o valor a ser depositado: "))
+          if valor_deposito > 0:
+                dados[cliente_atual]['saldo'] += valor_deposito
+                
+                data_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                dados[cliente_atual]['extrato'].append(f"{data_hora} - Deposito: R$ {valor_deposito:.2f}")
+                
+                print("Depósito realizado com sucesso!")
+          else:
+                print("Valor de depósito inválido.")
+      elif cliente_opcoes == "3":
+        valor_saque = float(input("Informe o valor a ser sacado: "))
+        if 0 < valor_saque <= dados[cliente_atual]['saldo']:
+            dados[cliente_atual]['saldo'] -= valor_saque
+            data_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            dados[cliente_atual]
+            ['extrato'].append(f"{data_hora} - Saque: R$ {valor_saque:.2f}")
+            print("Saque realizado com sucesso!")
+        elif valor_saque <= 0 or valor_saque > dados[cliente_atual]['saldo']:
+            print("Saldo insuficiente ou valor inválido.")
+        
+        elif cliente_opcoes == "4":
+          print("Simular rendimento")
 
-        elif cliente_opcoes == "2":
-            valor_deposito = float(input("Informe o valor a ser depositado: "))
-            if valor_deposito > 0:
-                  # Atualiza o saldo no dicionário local e na base principal
-                  cliente_atual['saldo'] += valor_deposito
-                  
-                  # Registra a transação no extrato
-                  data_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                  cliente_atual['extrato'].append(f"{data_hora} - Deposito: R$ {valor_deposito:.2f}")
+        elif cliente_opcoes == "5":
+
+          print("--- EXTRATO ---")
+          for transacao in cliente_atual['extrato']:
                   
                   print("Depósito realizado com sucesso!")
-
-        elif cliente_opcoes == "3":
-          print("Sacar valor")
 
         elif cliente_opcoes == "4":
           print("Simular rendimento")
@@ -75,7 +90,7 @@ while True:
               print(transacao)
 
         elif cliente_opcoes == "6":
-          break
+          continue
         else:
           print("Opcao invalida")
 
